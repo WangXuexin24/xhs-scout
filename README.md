@@ -32,7 +32,13 @@
 | 🔴 天猫 (Tmall) | ⚠️ 不稳定 | ✅ | ✅ |
 | ⚫ 京东/拼多多/1688/抖音 | ❌ 不可用 | ❌ | ⚠️ 部分支持 |
 
-> ⚠️ 以上实测基于 2026-06-14。Shopme API 后端由第三方维护，可用性可能变化。
+> ⚠️ **重要声明：以上实测基于 2026-06-14，由 OpenClaw + xhs-scout 在 Telegram 中实际调用测试。**
+> 
+> - 🟢 **小红书（XHS）**：唯一经过充分测试且稳定可用的平台
+> - 🟡 **淘宝/天猫**：不稳定，偶尔返回结果，搜索功能不可靠
+> - ⚫ **京东/拼多多/1688/抖音/速卖通**：未测试，MCP 声称支持但实际均未验证
+>
+> Shopme API 后端由第三方维护，可用性可能随时变化。**不要在生产环境依赖非 XHS 平台的搜索功能。**
 
 ## 🚀 安装
 
@@ -148,6 +154,13 @@ AI 调用 parse_product_link(url="https://item.taobao.com/item.htm?id=12345678")
 - **数据源**：Shopme 统一商品数据库（`api.shopmeagent.com`）
 - **协议**：Model Context Protocol (MCP) stdio 传输
 
+## ⚖️ 法律声明
+
+- 本工具通过 **Shopme 公开 API**（`api.shopmeagent.com`）查询数据，不直接爬取任何平台
+- 展示的所有商品信息均来自平台的公开数据
+- 本仓库仅包含配置文件和文档，不含任何平台专有数据
+- 如果您是平台方并对此工具有疑虑，请 [提交 Issue](https://github.com/WangXuexin24/xhs-scout/issues)
+
 ## 📸 截图
 
 ### 1. 在 Telegram 中搜索商品
@@ -188,6 +201,20 @@ AI 调用 parse_product_link(url="https://item.taobao.com/item.htm?id=12345678")
 
 **xhs-scout 只是对 Shopme MCP 服务器的封装和文档化，方便 OpenClaw 用户开箱即用。**  
 数据来源于 Shopme API，版权归各电商平台所有。
+
+## 📖 English Version
+
+👉 [README_en.md](README_en.md)
+
+## 📗 其他平台说明
+
+虽然 MCP 底层声称支持 8 个平台，但**实际测试仅有小红书（XHS）可用**：
+
+- 淘宝搜索不稳定（仅部分英文关键词偶尔有结果）
+- 天猫/京东/拼多多/1688/抖音/速卖通：搜索基本不返回结果
+- 链接解析功能对主要平台均可用（即使搜索不可用）
+
+**如果你在这些平台上搜索不到结果，不是你的配置问题——是上游 API 的限制。** 欢迎提交 PR 改进。
 
 ## 📄 许可证
 
