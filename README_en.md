@@ -1,5 +1,7 @@
 # 🛍️ xhs-scout
 
+[简体中文](README.md) · [**English**](README_en.md)
+
 > Chinese E-commerce Product Search MCP Server — Optimized for OpenClaw
 
 [![Vibecoding](https://img.shields.io/badge/🤖-Vibecoded_by_Clio-purple)](#⚠️-vibecoding-disclaimer)

@@ -1,5 +1,7 @@
 # 🛍️ xhs-scout
 
+[**简体中文**](README.md) · [English](README_en.md)
+
 > 小红书 + 淘宝 + 天猫商品搜索 MCP 服务器 | Chinese E-commerce Product Search for AI Agents
 
 [![Vibecoding](https://img.shields.io/badge/🤖-Vibecoded_by_Clio-purple)](#⚠️-vibecoding-声明)
