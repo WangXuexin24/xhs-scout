@@ -1,0 +1,27 @@
+# Dependencies
+node_modules/
+
+# Build output (we only distribute the docs)
+build/
+dist/
+
+# Environment / secrets
+.env
+.env.local
+*.token
+cookies.json
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+
+# Logs
+*.log
+npm-debug.log*
+
+# pnpm
+pnpm-lock.yaml
