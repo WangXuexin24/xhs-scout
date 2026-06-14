@@ -150,8 +150,23 @@ AI 调用 parse_product_link(url="https://item.taobao.com/item.htm?id=12345678")
 
 ## 📸 截图
 
-> 🖼️ 截图暂缺 — 欢迎贡献！  
-> 将截图放在 `screenshots/` 目录下，我会把它们加到 README 中。
+### 1. 在 Telegram 中搜索商品
+
+![搜索效果](screenshots/search-results.jpg)
+
+> 对 OpenClaw 说「在小红书搜帆布包」，返回商品图片、名称、价格和销量。
+
+### 2. 返回商品链接
+
+![商品链接](screenshots/product-links.jpg)
+
+> AI 同时返回商品的完整列表和链接，可按销量/价格排序。
+
+### 3. 在小红书客户端验证
+
+![小红书验证](screenshots/xiaohongshu-verify.jpg)
+
+> 点击链接可跳转到小红书 App/网页，确认商品真实存在。
 
 ## ⚠️ Vibecoding 声明
 
