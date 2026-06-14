@@ -44,41 +44,102 @@ Just say *"search for canvas bags on 小红书"* — your AI does the rest.
 
 > ⚠️ **Reality check**: Only **小红书 (Xiaohongshu)** has been thoroughly tested and works reliably. The MCP server claims to support 8 platforms, but in practice the upstream Shopme API only returns consistent results for XHS. Other platforms *may* return results sporadically — **treat them as experimental, not guaranteed**. Test results as of 2026-06-14.
 
+## 📦 Source Code
+
+> ⚠️ **This repo contains only docs, config, and install scripts — no MCP server source code.**
+
+The MCP server core is from **[shopmeskills/mcp](https://github.com/shopmeskills/mcp)** (MIT). Install scripts pull and build from upstream automatically. This keeps the repo lightweight and avoids version drift.
+
+To view/modify the MCP server source, visit:
+👉 https://github.com/shopmeskills/mcp/tree/main/packages/cn-ecommerce-search-mcp
+
 ## 🚀 Installation
 
-### Prerequisites
+### Common Prerequisites
 
-- [OpenClaw](https://openclaw.ai) running in Docker
+- [OpenClaw](https://openclaw.ai) installed
+- [Node.js](https://nodejs.org) ≥ 18
 - No API keys needed
 
-### Quick Install
+---
+
+### 🐳 Docker (recommended)
 
 ```bash
-# Inside your OpenClaw Docker container:
+# Inside your container
 docker exec -it openclaw-gateway bash
 
-# Clone & build
+# One-liner
+curl -fsSL https://raw.githubusercontent.com/WangXuexin24/xhs-scout/main/install.sh | bash
+```
+
+Or manual:
+
+```bash
+docker exec -it openclaw-gateway bash
 git clone --depth=1 https://github.com/shopmeskills/mcp.git /tmp/shopme-mcp
 cd /tmp/shopme-mcp
 COREPACK_HOME=/tmp/corepack pnpm install --frozen-lockfile
 COREPACK_HOME=/tmp/corepack pnpm run build
 
-# Move to persistent location (survives container restarts)
 mkdir -p ~/.openclaw/xhs-scout
 cp -r packages/cn-ecommerce-search-mcp/build ~/.openclaw/xhs-scout/build
 cp packages/cn-ecommerce-search-mcp/package.json ~/.openclaw/xhs-scout/
 cd ~/.openclaw/xhs-scout && npm install --omit=dev --silent
 
-# Register the MCP server
-openclaw mcp set xhs-scout '{"command":"node","args":["/home/node/.openclaw/xhs-scout/build/index.js"]}'
+openclaw mcp set xhs-scout "{command:node,args:[$HOME/.openclaw/xhs-scout/build/index.js]}"
 openclaw mcp reload
 openclaw mcp probe xhs-scout  # Should show "3 tools"
 ```
 
-### One-liner script
+---
+
+### 🪟 Windows (native)
+
+If you run OpenClaw directly on Windows (no Docker), use **PowerShell** or **CMD**:
+
+```powershell
+# 1. Ensure Node.js is installed
+node --version
+
+# 2. Clone & build (install pnpm first if needed: npm install -g pnpm)
+git clone --depth=1 https://github.com/shopmeskills/mcp.git %TEMP%\shopme-mcp
+cd %TEMP%\shopme-mcp
+pnpm install --frozen-lockfile
+pnpm run build
+
+# 3. Copy to persistent location
+mkdir %USERPROFILE%\.openclaw\xhs-scout
+xcopy /E packages\cn-ecommerce-search-mcp\build %USERPROFILE%\.openclaw\xhs-scout\build\
+copy packages\cn-ecommerce-search-mcp\package.json %USERPROFILE%\.openclaw\xhs-scout\
+cd %USERPROFILE%\.openclaw\xhs-scout
+npm install --omit=dev
+
+# 4. Register MCP
+openclaw mcp set xhs-scout "{command:node,args:[%USERPROFILE%/.openclaw/xhs-scout/build/index.js]}"
+openclaw mcp reload
+openclaw mcp probe xhs-scout
+```
+
+---
+
+### 🐧 Linux / 🍎 macOS (native)
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/WangXuexin24/xhs-scout/main/install.sh | bash
+git clone --depth=1 https://github.com/shopmeskills/mcp.git /tmp/shopme-mcp
+cd /tmp/shopme-mcp
+export COREPACK_HOME=/tmp/corepack
+pnpm install --frozen-lockfile
+pnpm run build
+
+mkdir -p $HOME/.openclaw/xhs-scout
+cp -r packages/cn-ecommerce-search-mcp/build $HOME/.openclaw/xhs-scout/build
+cp packages/cn-ecommerce-search-mcp/package.json $HOME/.openclaw/xhs-scout/
+cd $HOME/.openclaw/xhs-scout && npm install --omit=dev --silent
+
+openclaw mcp set xhs-scout "{command:node,args:[$HOME/.openclaw/xhs-scout/build/index.js]}"
+openclaw mcp reload
+openclaw mcp probe xhs-scout
 ```
 
 ## 💬 Usage Examples

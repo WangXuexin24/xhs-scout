@@ -42,44 +42,109 @@
 >
 > Shopme API 后端由第三方维护，可用性可能随时变化。**不要在生产环境依赖非 XHS 平台的搜索功能。**
 
+## 📦 源码说明
+
+> ⚠️ **本仓库只包含配置、文档和安装脚本，不包含 MCP 服务器核心源码。**
+
+MCP 服务器的核心代码来自 **[shopmeskills/mcp](https://github.com/shopmeskills/mcp)**（MIT 协议），安装时会自动从上游仓库拉取并构建。这样做的好处是：
+- 不会和上游代码版本脱节
+- 仓库轻量化，方便快速查阅文档
+- 如果上游更新，只需重新构建即可
+
+如果你想直接查看/修改 MCP 服务器源码，请访问：https://github.com/shopmeskills/mcp/tree/main/packages/cn-ecommerce-search-mcp
+
 ## 🚀 安装
 
-### 前置条件
+### 通用前置条件
 
-- [OpenClaw](https://openclaw.ai) 已部署
+- 已安装 [OpenClaw](https://openclaw.ai)
+- 已安装 [Node.js](https://nodejs.org) ≥ 18
 - 无需任何 API Key
 
-### 方式一：使用预编译的 MCP 服务器（推荐）
+---
+
+### 🐳 Docker 部署（推荐）
 
 ```bash
-# 进入你的 OpenClaw 容器
+# 进入容器
 docker exec -it openclaw-gateway bash
 
-# 克隆仓库
-git clone https://github.com/shopmeskills/mcp.git /tmp/shopme-mcp
-cd /tmp/shopme-mcp
+# 一键安装
+curl -fsSL https://raw.githubusercontent.com/WangXuexin24/xhs-scout/main/install.sh | bash
+```
 
-# 安装依赖并构建（需要 pnpm）
-COREPACK_HOME=/tmp/corepack pnpm install
+或手动：
+
+```bash
+# 进入容器后
+git clone --depth=1 https://github.com/shopmeskills/mcp.git /tmp/shopme-mcp
+cd /tmp/shopme-mcp
+COREPACK_HOME=/tmp/corepack pnpm install --frozen-lockfile
 COREPACK_HOME=/tmp/corepack pnpm run build
 
-# 复制到持久化位置（防止容器重启丢失）
 mkdir -p ~/.openclaw/xhs-scout
 cp -r packages/cn-ecommerce-search-mcp/build ~/.openclaw/xhs-scout/build
 cp packages/cn-ecommerce-search-mcp/package.json ~/.openclaw/xhs-scout/
-cd ~/.openclaw/xhs-scout && npm install --omit=dev
+cd ~/.openclaw/xhs-scout && npm install --omit=dev --silent
 
-# 注册 MCP 服务器
-openclaw mcp set xhs-scout '{"command":"node","args":["/home/node/.openclaw/xhs-scout/build/index.js"]}'
+openclaw mcp set xhs-scout "{command:node,args:[$HOME/.openclaw/xhs-scout/build/index.js]}"
 openclaw mcp reload
 openclaw mcp probe xhs-scout  # 应该显示 "3 tools"
 ```
 
-### 方式二：一键安装脚本
+---
+
+### 🪟 Windows 直接部署
+
+如果你在 Windows 上直接运行 OpenClaw（非 Docker），在 **PowerShell** 或 **CMD** 中执行：
+
+```powershell
+# 1. 确认 Node.js 已安装
+node --version
+
+# 2. 克隆并构建
+git clone --depth=1 https://github.com/shopmeskills/mcp.git %TEMP%\shopme-mcp
+cd %TEMP%\shopme-mcp
+pnpm install --frozen-lockfile
+pnpm run build
+
+# 3. 复制到持久化位置
+mkdir %USERPROFILE%\.openclaw\xhs-scout
+xcopy /E packages\cn-ecommerce-search-mcp\build %USERPROFILE%\.openclaw\xhs-scout\build\
+copy packages\cn-ecommerce-search-mcp\package.json %USERPROFILE%\.openclaw\xhs-scout\
+cd %USERPROFILE%\.openclaw\xhs-scout
+npm install --omit=dev
+
+# 4. 注册 MCP
+openclaw mcp set xhs-scout "{command:node,args:[%USERPROFILE%/.openclaw/xhs-scout/build/index.js]}"
+openclaw mcp reload
+openclaw mcp probe xhs-scout
+```
+
+> 提示：如果 `pnpm` 命令不存在，先运行 `npm install -g pnpm`
+
+---
+
+### 🐧 Linux / 🍎 macOS 直接部署
 
 ```bash
-# 仍在容器内
-curl -fsSL https://raw.githubusercontent.com/WangXuexin24/xhs-scout/main/install.sh | bash
+# 克隆并构建
+git clone --depth=1 https://github.com/shopmeskills/mcp.git /tmp/shopme-mcp
+cd /tmp/shopme-mcp
+export COREPACK_HOME=/tmp/corepack
+pnpm install --frozen-lockfile
+pnpm run build
+
+# 复制到持久化位置
+mkdir -p $HOME/.openclaw/xhs-scout
+cp -r packages/cn-ecommerce-search-mcp/build $HOME/.openclaw/xhs-scout/build
+cp packages/cn-ecommerce-search-mcp/package.json $HOME/.openclaw/xhs-scout/
+cd $HOME/.openclaw/xhs-scout && npm install --omit=dev --silent
+
+# 注册 MCP
+openclaw mcp set xhs-scout "{command:node,args:[$HOME/.openclaw/xhs-scout/build/index.js]}"
+openclaw mcp reload
+openclaw mcp probe xhs-scout
 ```
 
 ## 💬 使用示例
